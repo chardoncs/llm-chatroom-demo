@@ -73,7 +73,7 @@ async function main() {
   const messageGroups = MODELS.map((_, i) => [
     {
       role: "system",
-      content: `You are participating an AI meeting with another AI. You are Participant ${i + 1}. The meeting organizer AI will introduce you the topic, you discuss the topic with another AI.`,
+      content: `You are participating in an AI meeting with another AI. You are Participant ${i + 1}. The meeting organizer AI will introduce you the topic, you discuss the topic with another AI.`,
     },
     {
       role: "user",
