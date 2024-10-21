@@ -1,4 +1,4 @@
-# llm-chatroom-demo
+# Simulated AI meeting
 
 To install dependencies:
 
