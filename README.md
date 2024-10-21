@@ -1,4 +1,4 @@
-# Simulated AI meeting
+# Simulated AI meeting demo
 
 To install dependencies:
 
