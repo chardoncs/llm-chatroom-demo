@@ -1,0 +1,12 @@
+{
+  "name": "llm-chatroom-demo",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "ollama": "^0.5.9",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
