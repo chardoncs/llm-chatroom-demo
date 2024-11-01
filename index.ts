@@ -18,8 +18,25 @@ const SEPARATOR = GRAY + "-".repeat(30) + RESET
 
 const ITERATION = 10
 
+const logName = `./${new Date()}.md`
+
+process.on("exit", async () => {
+  console.write("Writing log... ")
+  await Bun.write(logName, mdLog)
+  console.log("done")
+})
+
+let mdLog = ""
+
+mdLog += "## Models:\n\n"
+
+for (const model of MODELS) {
+  mdLog += `- ${model}\n\n`
+}
+
 function printPrefix(content: string) {
   console.write(`${BRIGHT_MAGENTA}${content}${RESET} ${BOLD_CYAN}=>${RESET} `)
+  mdLog += `> ${content}\n\n`
 }
 
 async function sendChat(name: string, model: string, history: Message[]): Promise<string> {
@@ -40,6 +57,7 @@ async function sendChat(name: string, model: string, history: Message[]): Promis
   }
 
   console.log()
+  mdLog += `${text}\n\n`
   return text
 }
 
@@ -56,6 +74,8 @@ async function main() {
   console.log(SEPARATOR)
   printPrefix("You")
   console.log(prompt)
+
+  mdLog += `${prompt}\n\n---\n\n`
 
   // Meeting organizer
   console.log(SEPARATOR)
@@ -89,6 +109,7 @@ async function main() {
     const aiNo = i % MODELS.length
     console.log(SEPARATOR)
     console.log(`${GREEN}Iteration ${i + 1}${RESET}`)
+    mdLog += `---\n\nIteration${i + 1}\n\n`
 
     if (sender) {
       messageGroups[aiNo].push({

@@ -175,3 +175,9 @@ dist
 .DS_Store
 
 log-*.txt
+
+*.pdf
+*.tex
+*.log
+*.aux
+*.md
