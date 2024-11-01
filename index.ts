@@ -3,8 +3,12 @@
 import type { Message } from "ollama"
 import { Ollama } from "ollama"
 
-const ORGANIZER_MODEL = "llama3.2:3b"
-const MODELS = ["llama3.2:3b", "llama3.2:3b"]
+const PODCAST = "The AI Alice Show"
+const HOST = "AI Alice"
+const COHOST = "AI Sara"
+
+const ORGANIZER_MODEL = "granite3-dense:2b"
+const MODELS = ["granite3-dense:2b", "granite3-dense:2b"]
 
 const ollama = new Ollama()
 
@@ -16,7 +20,7 @@ const RESET = "\x1b[0m"
 
 const SEPARATOR = GRAY + "-".repeat(30) + RESET
 
-const ITERATION = 10
+const ITERATION = 30
 
 const logName = `./${new Date()}.md`
 
@@ -79,10 +83,10 @@ async function main() {
 
   // Meeting organizer
   console.log(SEPARATOR)
-  const organizerResponse = await sendChat("Organizer", ORGANIZER_MODEL, [
+  const organizerResponse = await sendChat("Screenwriter", ORGANIZER_MODEL, [
     {
       role: "system",
-      content: "You are an AI meeting organizer. The user will give you a topic to be discussed, and you start the meeting by introducing the topic to fellow AIs.",
+      content: `You are writing an agenda for a podcast called "${PODCAST}". The user will give you a topic to be discussed, and you provide the agenda.`,
     },
     {
       role: "user",
@@ -90,14 +94,19 @@ async function main() {
     },
   ])
 
+  const scenarios = [
+    `You are an AI podcaster named "${HOST}", hosting a podcast called "${PODCAST}". You are interviewing another AI. The agenda will be provided.`,
+    `You are a tech guru getting interviewed in a podcast hosted by an AI podcast called \"${PODCAST}\" hosted by ${HOST}.`,
+  ]
+
   const messageGroups = MODELS.map((_, i) => [
     {
       role: "system",
-      content: `You are participating in an AI meeting with another AI. You are Participant ${i + 1}. The meeting organizer AI will introduce you the topic, you discuss the topic with another AI.`,
+      content: scenarios[i],
     },
     {
       role: "user",
-      content: `Organizer: ${organizerResponse}`,
+      content: `Podcast agenda: ${organizerResponse}`,
     },
   ] satisfies Message[])
 
@@ -118,7 +127,7 @@ async function main() {
       })
     }
 
-    sender = `Participant ${aiNo + 1}`
+    sender = aiNo ? "Interviewee" : "Host"
     lastResponse = await sendChat(sender, MODELS[aiNo], messageGroups[aiNo])
 
     messageGroups[aiNo].push({
