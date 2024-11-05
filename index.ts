@@ -3,7 +3,6 @@
 import type { Message } from "ollama"
 import { Ollama } from "ollama"
 
-const ORGANIZER_MODEL = "llama3.2:3b"
 const MODELS = ["llama3.2:3b", "llama3.2:3b"]
 
 const ollama = new Ollama()
@@ -77,32 +76,19 @@ async function main() {
 
   mdLog += `${prompt}\n\n---\n\n`
 
-  // Meeting organizer
-  console.log(SEPARATOR)
-  const organizerResponse = await sendChat("Organizer", ORGANIZER_MODEL, [
-    {
-      role: "system",
-      content: "You are an AI meeting organizer. The user will give you a topic to be discussed, and you start the meeting by introducing the topic to fellow AIs.",
-    },
-    {
-      role: "user",
-      content: `Topic: ${prompt}`,
-    },
-  ])
-
   const messageGroups = MODELS.map((_, i) => [
     {
       role: "system",
-      content: `You are participating in an AI meeting with another AI. You are Participant ${i + 1}. The meeting organizer AI will introduce you the topic, you discuss the topic with another AI.`,
+      content: `You are Programmer ${i + 1}. You are pair-programming with another AI programmer for the given task.`,
     },
     {
       role: "user",
-      content: `Organizer: ${organizerResponse}`,
+      content: `Task: ${prompt}`,
     },
   ] satisfies Message[])
 
   let sender: string | undefined = undefined
-  let lastResponse = organizerResponse
+  let lastResponse = prompt
 
   // Participants
   for (let i = 0; i < ITERATION; i++) {
@@ -114,7 +100,8 @@ async function main() {
     if (sender) {
       messageGroups[aiNo].push({
         role: "user",
-        content: `${sender}: ${lastResponse}`,
+        //content: `${sender}: ${lastResponse}`,
+        content: lastResponse,
       })
     }
 
