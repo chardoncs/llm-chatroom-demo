@@ -181,3 +181,4 @@ log-*.txt
 *.log
 *.aux
 *.md
+!pair-programming-demo-1.md
